@@ -1,0 +1,5 @@
+import type { Metadata } from "next"; import Image from "next/image"; import { notFound } from "next/navigation";
+import { getNewsItem, news } from "@/src/entities/news/model/news"; import { PageShell } from "@/src/widgets/page-shell";
+export function generateStaticParams(){return news.map(({slug})=>({slug}));}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const item=getNewsItem(slug);return item?{title:`${item.title} | Фасадная симфония`,description:item.excerpt}:{title:"Новость не найдена"};}
+export default async function NewsDetail({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const item=getNewsItem(slug);if(!item)notFound();return <PageShell><article className="article-page"><div className="article-title"><span>{item.date}</span><h1>{item.title}</h1><p>{item.excerpt}</p></div><div className="article-image"><Image src={item.image} alt="" fill priority sizes="100vw" /></div><div className="article-body">{item.content.map(p=><p key={p}>{p}</p>)}</div></article></PageShell>}

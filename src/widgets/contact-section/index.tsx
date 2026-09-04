@@ -1,0 +1,3 @@
+import Image from "next/image";
+import { Arrow } from "@/src/shared/ui/arrow";
+export function ContactSection() { return <section className="contact" id="contacts"><div className="contact-image"><Image src="/contact.webp" alt="Современная архитектура Москвы" fill sizes="(max-width: 900px) 100vw, 50vw" /><span className="contact-caption">Материал · форма · свет</span></div><div className="contact-copy" data-reveal><p className="eyebrow"><span /> Сотрудничество</p><h2>Создадим<br /><em>следующий</em><br />объект</h2><p>Открыты к диалогу с архитекторами, девелоперами и генеральными подрядчиками.</p><a className="contact-button" href="mailto:info@smtrud.ru">Связаться с командой <Arrow /></a></div></section>; }
