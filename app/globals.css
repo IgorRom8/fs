@@ -544,6 +544,11 @@ body::before{display:none}
   .gallery-archive.is-open .archive-folder::before{width:165px}
 }
 
+.round-link::before{display:none}
+.round-link:hover{background:transparent;color:#fff;transform:none}
+.round-link>span{display:inline-block;transition:transform .45s var(--ease-smooth)}
+.round-link:hover>span{transform:rotate(45deg)}
+
 .contact-quick-info{display:grid;gap:9px;margin:28px 0 34px;font-size:14px}.contact-quick-info a{width:max-content;border-bottom:1px solid rgba(6,45,42,.28)}.contact-quick-info span{color:#66736f}
 .contact-form{margin-top:32px;max-width:580px}.contact-form label{display:block;margin-bottom:11px;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#61706c}.contact-form-row{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid var(--green)}.contact-form input{min-width:0;padding:15px 4px;border:0;outline:0;background:transparent;color:var(--ink);font:500 17px/1.3 "Manrope",sans-serif}.contact-form input::placeholder{color:#7e8986}.contact-form button{border:0;background:transparent;color:var(--green);display:flex;align-items:center;gap:22px;padding:10px 4px 10px 22px;cursor:pointer}.contact-form button svg{transition:transform .35s var(--ease-smooth)}.contact-form button:hover svg{transform:translateX(5px)}.contact-form small{display:block;margin-top:12px;color:#71807d;font-size:10px;line-height:1.5}
 .contacts-layout .contact-form{margin-top:55px}
