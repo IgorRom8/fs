@@ -5,12 +5,19 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "admin:hash": "node scripts/hash-admin-password.mjs",
+    "admin:import": "node --env-file=.env.local scripts/import-existing-content.mjs"
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.2",
     "next": "15.5.24",
+    "next-auth": "^5.0.0-beta.32",
+    "postgres": "^3.4.9",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "sharp": "^0.35.4",
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

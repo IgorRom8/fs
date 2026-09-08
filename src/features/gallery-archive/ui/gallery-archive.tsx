@@ -3,27 +3,28 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export function GalleryArchive({ images }: { images: string[] }) {
-  const [open, setOpen] = useState(false);
+type Album = { id: string; title: string; year: number; images: { src: string; alt: string }[] };
+export function GalleryArchive({ albums }: { albums: Album[] }) {
+  const [open, setOpen] = useState<string | null>(null);
   return (
-    <section className={`gallery-archive ${open ? "is-open" : ""}`}>
-      <button className="archive-folder" type="button" aria-expanded={open} aria-controls="gallery-2026" onClick={() => setOpen((value) => !value)}>
+    <>{albums.map(album => <section className={`gallery-archive ${open === album.id ? "is-open" : ""}`} key={album.id}>
+      <button className="archive-folder" type="button" aria-expanded={open === album.id} aria-controls={`gallery-${album.id}`} onClick={() => setOpen(value => value === album.id ? null : album.id)}>
         <span className="archive-label">Фотоархив</span>
-        <strong>2026</strong>
-        <span className="archive-meta">{images.length} фотографий</span>
-        <span className="archive-toggle" aria-hidden="true">{open ? "−" : "+"}</span>
+        <strong>{album.year}</strong>
+        <span className="archive-meta">{album.title} · {album.images.length} фотографий</span>
+        <span className="archive-toggle" aria-hidden="true">{open === album.id ? "−" : "+"}</span>
       </button>
-      <div className="archive-reveal" id="gallery-2026">
+      <div className="archive-reveal" id={`gallery-${album.id}`}>
         <div className="archive-reveal-inner">
           <div className="masonry content-section">
-            {images.map((image, index) => (
-              <div className={`masonry-item item-${index % 4}`} key={`${image}-${index}`}>
-                <Image src={image} alt={`Фасадные работы в 2026 году, фото ${index + 1}`} fill sizes="(max-width:700px) 100vw, 50vw" />
+            {album.images.map((image, index) => (
+              <div className={`masonry-item item-${index % 4}`} key={image.src}>
+                <Image src={image.src} alt={image.alt || `${album.title}, фото ${index + 1}`} fill sizes="(max-width:700px) 100vw, 50vw" unoptimized />
               </div>
             ))}
           </div>
         </div>
       </div>
-    </section>
+    </section>)}</>
   );
 }
