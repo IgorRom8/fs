@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import editorialStyles from "@/src/shared/ui/editorial.module.css";
+import motionStyles from "@/src/shared/ui/motion.module.css";
+import typographyStyles from "@/src/shared/ui/typography.module.css";
 
 export const metadata: Metadata = {
   title: "Фасадная симфония — навесные фасады под ключ",
@@ -8,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru">
+    <html lang="ru" className={`${editorialStyles.scope} ${motionStyles.scope} ${typographyStyles.scope}`}>
       <body>{children}</body>
     </html>
   );

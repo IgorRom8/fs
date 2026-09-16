@@ -7,11 +7,12 @@ import { ProjectsSection } from "@/src/widgets/projects-section";
 import { ServicesSection } from "@/src/widgets/services-section";
 import { StandardsSection } from "@/src/widgets/standards-section";
 import { getPublishedProjects } from "@/src/entities/project/api/projects-repository";
+import { getAccumulatedFacadeVolume } from "@/src/shared/lib/production-volume";
 
 export const revalidate = 3600;
 export default async function Home() {
   const projects = await getPublishedProjects();
-  const totalArea = projects.reduce((sum, project) => sum + Number(project.facadeArea ?? 0), 0);
+  const accumulatedVolume = getAccumulatedFacadeVolume();
   const daysOnMarket = Math.max(0, Math.floor((Date.now() - Date.UTC(2025, 9, 30)) / 86_400_000));
-  return <main><Header /><HeroSection /><AboutSection daysOnMarket={daysOnMarket} totalArea={totalArea}/><ServicesSection /><ProjectsSection projects={projects}/><StandardsSection /><ContactSection /><Footer /></main>;
+  return <main><Header /><HeroSection /><AboutSection daysOnMarket={daysOnMarket} accumulatedVolume={accumulatedVolume}/><ServicesSection /><ProjectsSection projects={projects}/><StandardsSection /><ContactSection /><Footer /></main>;
 }

@@ -1,0 +1,149 @@
+/* Unified public typography: four content sizes plus one micro label size. */
+.scope{
+  --type-display:clamp(46px,5.7vw,86px);
+  --type-title:clamp(34px,3.8vw,60px);
+  --type-card:clamp(22px,2vw,32px);
+  --type-body:clamp(14px,1.05vw,17px);
+  --type-label:10px;
+}
+
+.scope :global(body),.scope :global(p){font-size:var(--type-body)}
+
+.scope :global(h1),
+.scope :global(.hero-content h1),
+.scope :global(.page-hero-copy h1),
+.scope :global(.detail-title h1),
+.scope :global(.article-title h1),
+.scope :global(.archive-folder strong){
+  font-size:var(--type-display);
+  line-height:1.02;
+}
+
+.scope :global(h2),
+.scope :global(.intro-copy h2),
+.scope :global(.services-head h2),
+.scope :global(.projects-heading h2),
+.scope :global(.sticky-title h2),
+.scope :global(.contact-copy h2),
+.scope :global(.documents h2),
+.scope :global(.contacts-layout h2),
+.scope :global(.about-lead .lead),
+.scope :global(.detail-intro p),
+.scope :global(.partner-cta p),
+.scope :global(.stats strong){
+  font-size:var(--type-title);
+  line-height:1.12;
+}
+
+.scope :global(h3),
+.scope :global(.service-card h3),
+.scope :global(.standard-list h3),
+.scope :global(.project-overlay h3),
+.scope :global(.listing-copy h2),
+.scope :global(.news-card h2),
+.scope :global(.partners-grid h2),
+.scope :global(.principles h2),
+.scope :global(.map-placeholder strong),
+.scope :global(.map-card strong){
+  font-size:var(--type-card);
+  line-height:1.2;
+}
+
+.scope :global(.hero-bottom p),
+.scope :global(.page-hero-copy p),
+.scope :global(.article-title p),
+.scope :global(.article-body p),
+.scope :global(.intro-text p),
+.scope :global(.service-card p),
+.scope :global(.standard-list p),
+.scope :global(.listing-copy p),
+.scope :global(.news-card p),
+.scope :global(.documents p),
+.scope :global(.contacts-layout address p),
+.scope :global(.contact-copy>p:not(.eyebrow)),
+.scope :global(.projects-heading p),
+.scope :global(.projects-foot p),
+.scope :global(.contact-quick-info),
+.scope :global(.contact-form input),
+.scope :global(.footer-top>p),
+.scope :global(.footer-contacts a),
+.scope :global(.footer-contacts address){
+  font-size:var(--type-body);
+  line-height:1.72;
+}
+
+.scope :global(.eyebrow),
+.scope :global(.section-label),
+.scope :global(.page-kicker),
+.scope :global(.page-hero-copy>span),
+.scope :global(.detail-title>span),
+.scope :global(.article-title>span),
+.scope :global(.listing-copy>span),
+.scope :global(.news-card>span),
+.scope :global(.project-overlay span),
+.scope :global(.stats span),
+.scope :global(.partners-grid span),
+.scope :global(.archive-label),
+.scope :global(.archive-meta),
+.scope :global(.contact-caption),
+.scope :global(.contact-form label),
+.scope :global(.contact-form small),
+.scope :global(.map-card span),
+.scope :global(.footer-contacts span),
+.scope :global(.footer-bottom p),
+.scope :global(.footer-bottom span){
+  font-size:var(--type-label);
+  line-height:1.5;
+}
+
+.scope :global(.nav),
+.scope :global(.nav a),
+.scope :global(.header-cta),
+.scope :global(.pill),
+.scope :global(.text-link),
+.scope :global(.contact-button),
+.scope :global(.contact-form button),
+.scope :global(.listing-copy i),
+.scope :global(.news-card i),
+.scope :global(.map-placeholder a),
+.scope :global(.map-card a),
+.scope :global(.footer-up),
+.scope :global(.project-back){
+  font-size:var(--type-body);
+}
+
+@media(max-width:900px){
+  .scope{
+    --type-display:clamp(40px,9vw,58px);
+    --type-title:clamp(31px,7.8vw,48px);
+    --type-card:clamp(21px,5.8vw,29px);
+    --type-body:clamp(14px,3.8vw,16px);
+  }
+  .scope :global(.nav a){font-size:var(--type-card)}
+}
+
+@media(max-width:520px){
+  .scope{
+    --type-display:clamp(36px,10vw,48px);
+    --type-title:clamp(29px,8vw,40px);
+  }
+}
+
+.scope :global(.project-facts){margin:55px 0 0;border-top:1px solid rgba(6,45,42,.2)}.scope :global(.project-facts div){display:grid;grid-template-columns:minmax(130px,.7fr) 1fr;gap:30px;padding:20px 0;border-bottom:1px solid rgba(6,45,42,.2)}.scope :global(.project-facts dt){font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#687471}.scope :global(.project-facts dd){margin:0;font-size:16px}@media(max-width:700px){.scope :global(.project-facts){margin-top:35px}.scope :global(.project-facts div){grid-template-columns:1fr;gap:7px}}
+.scope :global(.intro-copy h2){max-width:none;font-size:clamp(38px,3.6vw,56px);line-height:1.13}
+.scope :global(.intro-copy h2 span),.scope :global(.intro-copy h2 em){display:block;margin-left:0;white-space:nowrap}
+@media(min-width:901px){
+  .scope :global(.intro-copy){grid-template-columns:minmax(0,2fr) minmax(300px,.72fr);align-items:start;gap:70px;padding-left:5vw;padding-right:5vw}
+  .scope :global(.intro-copy h2){grid-column:1}
+  .scope :global(.intro-copy .intro-text){grid-column:2;justify-self:end;width:100%;padding-top:0}
+}
+@media(max-width:520px){.scope :global(.intro-copy h2 span),.scope :global(.intro-copy h2 em){white-space:normal}.scope :global(.intro-copy h2){font-size:34px}}
+.scope :global(.hero-content h1 .hero-line){display:block}
+.scope :global(.hero-content h1 .hero-line-accent){margin-top:.28em;margin-left:0;letter-spacing:0}
+.scope :global(.hero-content h1 .hero-line-last){margin-top:.28em}
+.scope :global(h1),.scope :global(.page-hero-copy h1),.scope :global(.detail-title h1),.scope :global(.article-title h1){font-size:var(--type-display)}
+.scope :global(.hero-content h1){font-size:var(--type-display)}
+.scope :global(h2),.scope :global(.intro-copy h2),.scope :global(.services-head h2),.scope :global(.projects-heading h2),.scope :global(.sticky-title h2),.scope :global(.contact-copy h2){font-size:var(--type-title)}
+.scope :global(.listing-copy h2),.scope :global(.news-card h2),.scope :global(.partners-grid h2),.scope :global(.principles h2),.scope :global(.service-card h3),.scope :global(.standard-list h3),.scope :global(.project-overlay h3){font-size:var(--type-card)}
+.scope :global(p),.scope :global(.intro-text p),.scope :global(.service-card p),.scope :global(.standard-list p),.scope :global(.listing-copy p),.scope :global(.news-card p),.scope :global(.page-hero-copy p),.scope :global(.project-facts dd){font-size:var(--type-body)}
+.scope :global(.project-facts dt){font-size:var(--type-label)}

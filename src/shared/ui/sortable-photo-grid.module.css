@@ -1,0 +1,120 @@
+.root {
+  display: grid;
+  gap: 18px;
+}
+
+.status {
+  min-height: 22px;
+  margin: 0;
+  color: #687572;
+  font-size: 13px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  min-width: 0;
+  padding: 8px;
+  border: 1px solid rgba(6, 45, 42, .2);
+  background: #e8e2d6;
+  cursor: grab;
+  transition: border-color .2s ease, transform .2s ease, opacity .2s ease;
+}
+
+.card:hover,
+.dragOver {
+  border-color: #062d2a;
+  transform: translateY(-2px);
+}
+
+.dragging {
+  opacity: .45;
+  cursor: grabbing;
+}
+
+.image {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  background: #d8d2c6;
+}
+
+.image img {
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.position {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-width: 31px;
+  height: 31px;
+  padding: 0 7px;
+  border-radius: 100px;
+  background: #062d2a;
+  color: #fff;
+  font-size: 11px;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 2px 2px;
+}
+
+.caption strong {
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.actions button {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid rgba(6, 45, 42, .28);
+  background: transparent;
+  color: #062d2a;
+  cursor: pointer;
+}
+
+.actions button:disabled {
+  cursor: default;
+  opacity: .3;
+}
+
+.actions .delete {
+  border-color: rgba(142, 51, 44, .32);
+  color: #8e332c;
+}
+
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .image {
+    height: 125px;
+  }
+}
+
