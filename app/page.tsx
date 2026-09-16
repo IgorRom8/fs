@@ -14,5 +14,5 @@ export default async function Home() {
   const projects = await getPublishedProjects();
   const accumulatedVolume = getAccumulatedFacadeVolume();
   const daysOnMarket = Math.max(0, Math.floor((Date.now() - Date.UTC(2025, 9, 30)) / 86_400_000));
-  return <main><Header /><HeroSection /><AboutSection daysOnMarket={daysOnMarket} accumulatedVolume={accumulatedVolume}/><ServicesSection /><ProjectsSection projects={projects}/><StandardsSection /><ContactSection /><Footer /></main>;
+  return <main className="site-page"><Header /><HeroSection /><AboutSection daysOnMarket={daysOnMarket} accumulatedVolume={accumulatedVolume}/><ServicesSection /><ProjectsSection projects={projects}/><StandardsSection /><ContactSection /><Footer /></main>;
 }
