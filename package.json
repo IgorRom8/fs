@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/migrate-database.mjs",
     "build": "next build",
     "start": "next start",
     "admin:hash": "node scripts/hash-admin-password.mjs",
     "admin:import": "node --env-file=.env.local scripts/import-existing-content.mjs",
-    "db:migrate": "node --env-file=.env.local scripts/migrate-database.mjs"
+    "db:migrate": "node scripts/migrate-database.mjs"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",

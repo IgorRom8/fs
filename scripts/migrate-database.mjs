@@ -1,6 +1,13 @@
+import { existsSync } from "node:fs";
 import { readdir } from "node:fs/promises";
 import { resolve } from "node:path";
+import { loadEnvFile } from "node:process";
 import postgres from "postgres";
+
+const localEnvironment = resolve(".env.local");
+if (!process.env.DATABASE_URL && !process.env.DATABASE_URL_NEON && existsSync(localEnvironment)) {
+  loadEnvFile(localEnvironment);
+}
 
 const databaseUrl = process.env.DATABASE_URL ?? process.env.DATABASE_URL_NEON;
 if (!databaseUrl) throw new Error("DATABASE_URL или DATABASE_URL_NEON не настроен");
