@@ -11,7 +11,7 @@ export function ContactForm() {
           <Arrow />
         </button>
       </div>
-      <small>Нажимая кнопку, вы создадите письмо для нашей команды.</small>
+      <small>Нажимая кнопку, вы создадите письмо для нашей команды</small>
     </form>
   );
 }

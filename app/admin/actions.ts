@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/src/shared/lib/admin";
 import { db } from "@/src/shared/lib/db";
-import { auditLog, galleryAlbums, galleryMedia, media, newsItems, projectMedia, projectsTable } from "@/src/shared/lib/db/schema";
+import { auditLog, galleryAlbums, galleryMedia, media, newsItems, partnersTable, projectMedia, projectsTable } from "@/src/shared/lib/db/schema";
 import { saveImage } from "@/src/shared/lib/media";
 
 const text = z.string().trim().min(1);
@@ -49,6 +49,17 @@ export async function createGalleryAlbum(form: FormData) {
   revalidatePath("/gallery"); redirect("/admin");
 }
 
+export async function createPartner(form: FormData) {
+  const user = await requireAdmin();
+  const parsed = z.object({ slug: z.string().trim().max(100), title: text, description: text, position: z.coerce.number().int().min(0).max(999), published: z.boolean() }).parse({ slug: String(form.get("slug") ?? ""), title: form.get("title"), description: form.get("description"), position: form.get("position"), published: form.get("published") === "on" });
+  const logo = form.get("logo");
+  if (!(logo instanceof File) || !logo.size) throw new Error("Добавьте логотип партнёра");
+  const logoId = await saveImage(logo, parsed.title);
+  const [item] = await db().insert(partnersTable).values({ ...parsed, slug: makeSlug(parsed.slug || parsed.title), logoId }).returning({ id: partnersTable.id });
+  await db().insert(auditLog).values({ actorEmail: user.email!, action: "create", entityType: "partner", entityId: item.id });
+  revalidatePath("/partners"); revalidatePath("/admin"); redirect("/admin");
+}
+
 export async function updateNews(form: FormData) {
   const user = await requireAdmin();
   const id = z.string().uuid().parse(form.get("id"));
@@ -84,6 +95,20 @@ export async function updateGalleryAlbum(form: FormData) {
   }
   await db().insert(auditLog).values({ actorEmail: user.email!, action: "update", entityType: "gallery", entityId: id });
   revalidatePath("/gallery"); revalidatePath("/admin"); redirect(`/admin/gallery/${id}`);
+}
+
+export async function updatePartner(form: FormData) {
+  const user = await requireAdmin();
+  const id = z.string().uuid().parse(form.get("id"));
+  const parsed = z.object({ slug: z.string().trim().max(100), title: text, description: text, position: z.coerce.number().int().min(0).max(999) }).parse({ slug: String(form.get("slug") ?? ""), title: form.get("title"), description: form.get("description"), position: form.get("position") });
+  const [current] = await db().select({ logoId: partnersTable.logoId }).from(partnersTable).where(eq(partnersTable.id, id)).limit(1);
+  if (!current) throw new Error("Партнёр не найден");
+  const file = form.get("logo");
+  const logoId = file instanceof File && file.size > 0 ? await saveImage(file, parsed.title) : current.logoId;
+  await db().update(partnersTable).set({ ...parsed, slug: makeSlug(parsed.slug || parsed.title), logoId, updatedAt: new Date() }).where(eq(partnersTable.id, id));
+  if (logoId && current.logoId && logoId !== current.logoId) await db().delete(media).where(eq(media.id, current.logoId));
+  await db().insert(auditLog).values({ actorEmail: user.email!, action: "update", entityType: "partner", entityId: id });
+  revalidatePath("/partners"); revalidatePath("/admin"); redirect(`/admin/partners/${id}`);
 }
 
 export async function addProjectPhotos(projectId: string, form: FormData) {
@@ -176,17 +201,21 @@ export async function removeGalleryPhoto(albumId: string, mediaId: string) {
 }
 
 export async function togglePublished(form: FormData) {
-  const user = await requireAdmin(); const id = z.string().uuid().parse(form.get("id")); const type = z.enum(["news", "project", "gallery"]).parse(form.get("type")); const published = form.get("published") === "true";
+  const user = await requireAdmin(); const id = z.string().uuid().parse(form.get("id")); const type = z.enum(["news", "project", "gallery", "partner"]).parse(form.get("type")); const published = form.get("published") === "true";
   if (type === "news") await db().update(newsItems).set({ published, publishedAt: published ? new Date() : null, updatedAt: new Date() }).where(eq(newsItems.id, id));
   else if (type === "project") await db().update(projectsTable).set({ published, updatedAt: new Date() }).where(eq(projectsTable.id, id));
-  else await db().update(galleryAlbums).set({ published, updatedAt: new Date() }).where(eq(galleryAlbums.id, id));
+  else if (type === "gallery") await db().update(galleryAlbums).set({ published, updatedAt: new Date() }).where(eq(galleryAlbums.id, id));
+  else await db().update(partnersTable).set({ published, updatedAt: new Date() }).where(eq(partnersTable.id, id));
   await db().insert(auditLog).values({ actorEmail: user.email!, action: published ? "publish" : "unpublish", entityType: type, entityId: id });
-  revalidatePath(type === "news" ? "/news" : type === "project" ? "/portfolio" : "/gallery"); revalidatePath("/admin");
+  revalidatePath(type === "news" ? "/news" : type === "project" ? "/portfolio" : type === "gallery" ? "/gallery" : "/partners"); revalidatePath("/admin");
 }
 
 export async function deleteEntry(form: FormData) {
-  const user = await requireAdmin(); const id = z.string().uuid().parse(form.get("id")); const type = z.enum(["news", "project", "gallery"]).parse(form.get("type"));
-  if (type === "news") await db().delete(newsItems).where(eq(newsItems.id, id)); else if (type === "project") await db().delete(projectsTable).where(eq(projectsTable.id, id)); else await db().delete(galleryAlbums).where(eq(galleryAlbums.id, id));
+  const user = await requireAdmin(); const id = z.string().uuid().parse(form.get("id")); const type = z.enum(["news", "project", "gallery", "partner"]).parse(form.get("type"));
+  let partnerLogoId: string | null = null;
+  if (type === "partner") partnerLogoId = (await db().select({ logoId: partnersTable.logoId }).from(partnersTable).where(eq(partnersTable.id, id)).limit(1))[0]?.logoId ?? null;
+  if (type === "news") await db().delete(newsItems).where(eq(newsItems.id, id)); else if (type === "project") await db().delete(projectsTable).where(eq(projectsTable.id, id)); else if (type === "gallery") await db().delete(galleryAlbums).where(eq(galleryAlbums.id, id)); else await db().delete(partnersTable).where(eq(partnersTable.id, id));
+  if (partnerLogoId) await db().delete(media).where(eq(media.id, partnerLogoId));
   await db().insert(auditLog).values({ actorEmail: user.email!, action: "delete", entityType: type, entityId: id });
-  revalidatePath(type === "news" ? "/news" : type === "project" ? "/portfolio" : "/gallery"); revalidatePath("/admin");
+  revalidatePath(type === "news" ? "/news" : type === "project" ? "/portfolio" : type === "gallery" ? "/gallery" : "/partners"); revalidatePath("/admin");
 }

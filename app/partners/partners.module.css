@@ -1,0 +1,5 @@
+.cta{margin:0 4.5vw 110px;padding:80px 7vw;background:#062d2a;color:#fff;display:grid;grid-template-columns:.45fr 1.5fr;gap:35px 7vw;align-items:start}
+.cta>span{color:#9eb5b1}
+.cta h2{margin:0;max-width:920px}
+.cta a{grid-column:2;width:max-content;display:inline-flex;align-items:center;gap:28px;border-bottom:1px solid rgba(255,255,255,.65);padding-bottom:9px}
+@media(max-width:800px){.cta{margin:0 20px 70px;padding:52px 28px;grid-template-columns:1fr}.cta h2,.cta a{grid-column:1}}
