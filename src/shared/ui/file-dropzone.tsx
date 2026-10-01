@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, DragEvent } from "react";
 
 const acceptedTypes = ["image/jpeg", "image/png", "image/webp", "image/avif"];
+const maxFileSize = 25_000_000;
+const maxBatchSize = 30_000_000;
 
 type FileDropzoneProps = { name: string; label: string; multiple?: boolean; required?: boolean; maxFiles?: number };
 
@@ -14,15 +16,21 @@ export function FileDropzone({ name, label, multiple = false, required = false, 
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [dragging, setDragging] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => () => previewUrlsRef.current.forEach((url) => URL.revokeObjectURL(url)), []);
 
   function applyFiles(incoming: File[]) {
+    if (incoming.length === 0) return;
     const combined = multiple ? [...files, ...incoming] : incoming;
     const unique = combined.filter((file, index, list) => list.findIndex(candidate => candidate.name === file.name && candidate.size === file.size && candidate.lastModified === file.lastModified) === index);
-    const candidates = unique.filter((file) => acceptedTypes.includes(file.type) && file.size <= 4_000_000).slice(0, multiple ? maxFiles : 1);
-    const valid = candidates.filter((file, index) => candidates.slice(0, index + 1).reduce((total, item) => total + item.size, 0) <= 30_000_000);
-    if (!inputRef.current || valid.length === 0) return;
+    const supported = unique.filter((file) => acceptedTypes.includes(file.type));
+    const candidates = supported.filter((file) => file.size <= maxFileSize).slice(0, multiple ? maxFiles : 1);
+    const valid = candidates.filter((file, index) => candidates.slice(0, index + 1).reduce((total, item) => total + item.size, 0) <= maxBatchSize);
+    if (!inputRef.current || valid.length === 0) {
+      setError(supported.length === 0 ? "Допустимы только JPEG, PNG, WebP и AVIF." : "Файл слишком большой. Максимум 25 МБ на файл и 30 МБ за одну загрузку.");
+      return;
+    }
     const transfer = new DataTransfer();
     valid.forEach((file) => transfer.items.add(file));
     inputRef.current.files = transfer.files;
@@ -31,6 +39,7 @@ export function FileDropzone({ name, label, multiple = false, required = false, 
     previewUrlsRef.current = nextPreviewUrls;
     setPreviewUrls(nextPreviewUrls);
     setFiles(valid);
+    setError(valid.length < unique.length ? "Часть файлов не добавлена: максимум 25 МБ на файл и 30 МБ за одну загрузку." : "");
   }
 
   function drop(event: DragEvent<HTMLLabelElement>) {
@@ -48,8 +57,9 @@ export function FileDropzone({ name, label, multiple = false, required = false, 
       <span className="admin-dropzone-copy">
         <strong>{files.length ? (multiple ? `Выбрано файлов: ${files.length}` : files[0].name) : "Перетащите изображение сюда"}</strong>
         <small>{files.length ? (multiple ? `Можно добавить ещё одной пачкой · максимум ${maxFiles}` : "Нажмите или перетащите другой файл, чтобы заменить") : `или нажмите, чтобы выбрать${multiple ? ` до ${maxFiles} файлов` : " файл"}`}</small>
-        {!files.length && <em>JPEG · PNG · WEBP · AVIF / до 4 МБ файл · до 30 МБ за раз</em>}
+        {!files.length && <em>JPEG · PNG · WEBP · AVIF / до 25 МБ файл · до 30 МБ за раз</em>}
       </span>
     </label>
+    {error && <small className="admin-upload-error" role="alert">{error}</small>}
   </div>;
 }

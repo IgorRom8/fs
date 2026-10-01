@@ -10,13 +10,19 @@ export const initialPartners = [
   { id: "zhelezny-fort", slug: "zhelezny-fort", title: "Железный Форт", description: "Производитель кровельно-фасадных материалов и изделий из оцинкованной стали, выполняющий также резку, гибку и окраску металла.", logo: "/partners/zhelezny-fort.jpg", position: 3 },
   { id: "am-arkhimed", slug: "am-arkhimed", title: "АМ АРХИМЕД", description: "Московское архитектурное бюро, которое с 2001 года проектирует градостроительные комплексы, общественные здания и жилые дома.", logo: "/partners/arkhimed.png", position: 4 },
   { id: "promaliance", slug: "promaliance", title: "Промальянс", description: "Современное высокотехнологичное производство широкого спектра изделий из металла для внешней и внутренней отделки зданий.", logo: "/partners/promaliance.png", position: 5 },
+  { id: "stroy-alliance", slug: "stroy-alliance", title: "Строй Альянс", description: "Поставщик строительных и отделочных материалов с 2014 года. Помогает подобрать и рассчитать решения, организовать тестирование и обеспечивает поставки по России благодаря собственной складской инфраструктуре и автопарку.", logo: "/partners/stroy-alliance.svg", position: 6 },
 ];
 
 export async function getPublishedPartners() {
   if (!hasDatabase()) return initialPartners;
   try {
     const rows = await db().select().from(partnersTable).where(eq(partnersTable.published, true)).orderBy(asc(partnersTable.position), asc(partnersTable.createdAt));
-    return rows.map((partner) => ({ ...partner, logo: partner.logoId ? `/api/media/${partner.logoId}` : partner.logoPath ?? "/partners/versal.png" }));
+    const partners = rows.map((partner) => ({ ...partner, logo: partner.logoId ? `/api/media/${partner.logoId}` : partner.logoPath ?? "/partners/versal.png" }));
+    const stroyAlliance = initialPartners.find((partner) => partner.id === "stroy-alliance");
+
+    return stroyAlliance && !partners.some((partner) => partner.slug === stroyAlliance.slug)
+      ? [...partners, stroyAlliance]
+      : partners;
   } catch {
     return initialPartners;
   }

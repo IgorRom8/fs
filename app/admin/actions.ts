@@ -32,7 +32,7 @@ export async function createProject(form: FormData) {
   const parsed = z.object({ slug: z.string().trim().max(100), title: text, category: text, location: text, description: text, developer: optionalText, facadeArea: area, floors: optionalText, sections: optionalText, status: text, published: z.boolean() }).parse({ slug: String(form.get("slug") ?? ""), title: form.get("title"), category: form.get("category"), location: form.get("location"), description: form.get("description"), developer: String(form.get("developer") ?? ""), facadeArea: String(form.get("facadeArea") ?? ""), floors: String(form.get("floors") ?? ""), sections: String(form.get("sections") ?? ""), status: form.get("status"), published: form.get("published") === "on" });
   const data = { ...parsed, slug: makeSlug(parsed.slug || parsed.title) };
   const [item] = await db().insert(projectsTable).values(data).returning({ id: projectsTable.id });
-  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 30);
+  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 100);
   for (const [position, file] of files.entries()) { const mediaId = await saveImage(file, data.title); if (mediaId) await db().insert(projectMedia).values({ projectId: item.id, mediaId, position }); }
   await db().insert(auditLog).values({ actorEmail: user.email!, action: "create", entityType: "project", entityId: item.id });
   revalidatePath("/portfolio"); redirect("/admin");
@@ -41,7 +41,7 @@ export async function createProject(form: FormData) {
 export async function createGalleryAlbum(form: FormData) {
   const user = await requireAdmin();
   const parsed = z.object({ title: text, year: z.coerce.number().int().min(2000).max(2100), published: z.boolean() }).parse({ title: form.get("title"), year: form.get("year"), published: form.get("published") === "on" });
-  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 50);
+  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 100);
   if (!files.length) throw new Error("Добавьте хотя бы одну фотографию");
   const [album] = await db().insert(galleryAlbums).values(parsed).returning({ id: galleryAlbums.id });
   for (const [position, file] of files.entries()) { const mediaId = await saveImage(file, parsed.title); if (mediaId) await db().insert(galleryMedia).values({ albumId: album.id, mediaId, position }); }
@@ -87,7 +87,7 @@ export async function updateGalleryAlbum(form: FormData) {
   const id = z.string().uuid().parse(form.get("id"));
   const parsed = z.object({ title: text, year: z.coerce.number().int().min(2000).max(2100) }).parse({ title: form.get("title"), year: form.get("year") });
   await db().update(galleryAlbums).set({ ...parsed, updatedAt: new Date() }).where(eq(galleryAlbums.id, id));
-  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 50);
+  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 100);
   if (files.length) {
     const [last] = await db().select({ position: galleryMedia.position }).from(galleryMedia).where(eq(galleryMedia.albumId, id)).orderBy(desc(galleryMedia.position)).limit(1);
     const startPosition = (last?.position ?? -1) + 1;
@@ -116,7 +116,7 @@ export async function addProjectPhotos(projectId: string, form: FormData) {
   const id = z.string().uuid().parse(projectId);
   const [project] = await db().select({ title: projectsTable.title, slug: projectsTable.slug }).from(projectsTable).where(eq(projectsTable.id, id)).limit(1);
   if (!project) throw new Error("Объект не найден");
-  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 30);
+  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 100);
   if (!files.length) throw new Error("Добавьте хотя бы одну фотографию");
   const [last] = await db().select({ position: projectMedia.position }).from(projectMedia).where(eq(projectMedia.projectId, id)).orderBy(desc(projectMedia.position)).limit(1);
   const startPosition = (last?.position ?? -1) + 1;
@@ -133,7 +133,7 @@ export async function addGalleryPhotos(albumId: string, form: FormData) {
   const id = z.string().uuid().parse(albumId);
   const [album] = await db().select({ title: galleryAlbums.title }).from(galleryAlbums).where(eq(galleryAlbums.id, id)).limit(1);
   if (!album) throw new Error("Альбом не найден");
-  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 50);
+  const files = form.getAll("images").filter((value): value is File => value instanceof File && value.size > 0).slice(0, 100);
   if (!files.length) throw new Error("Добавьте хотя бы одну фотографию");
   const [last] = await db().select({ position: galleryMedia.position }).from(galleryMedia).where(eq(galleryMedia.albumId, id)).orderBy(desc(galleryMedia.position)).limit(1);
   const startPosition = (last?.position ?? -1) + 1;

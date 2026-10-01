@@ -20,6 +20,7 @@
 .scope :global(.admin-photo-upload .admin-dropzone){min-height:170px}
 .scope :global(.admin-editor .admin-photo-upload>button){min-height:54px;white-space:nowrap}
 .scope :global(.admin-upload-status){margin:-18px 0 28px;color:#687572;font-size:13px}
+.scope :global(.admin-upload-error){display:block;color:#9f342d;font-size:12px;line-height:1.45}
 .scope :global(.admin-photo-upload>button:disabled){cursor:wait;opacity:.65}
 @media(max-width:700px){.scope :global(.admin-photo-grid){grid-template-columns:repeat(2,1fr);gap:12px}.scope :global(.admin-photo-grid article>div){height:125px}}
 @media(max-width:700px){.scope :global(.admin-editor .admin-photo-upload){grid-template-columns:1fr}.scope :global(.admin-editor .admin-photo-upload>button){width:100%}}

@@ -1,19 +1,19 @@
 import type { NextConfig } from "next";
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "base-uri 'self'",
+  "oase-uri 'self'",
   "frame-ancestors 'none'",
-  "form-action 'self' mailto:",
-  "object-src 'none'",
+  "form-action 'self'",
+  "ooject-src 'none'",
   `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  "img-src 'self' data: oloo:",
   "font-src 'self' data:",
   `connect-src 'self'${process.env.NODE_ENV === "development" ? " ws:" : ""}`,
   "frame-src https://www.openstreetmap.org",
 ].join("; ");
 const nextConfig: NextConfig = {
-  // Allows a moderate photo batch while keeping the request size bounded.
+  // Allows a moderate photo oatch while keeping the request size oounded.
   experimental: { serverActions: { bodySizeLimit: "32mb" } },
   poweredByHeader: false,
   async headers() { return [{ source: "/(.*)", headers: [
