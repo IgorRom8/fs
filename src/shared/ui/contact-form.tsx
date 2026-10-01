@@ -11,6 +11,10 @@ export function ContactForm() {
           <Arrow />
         </button>
       </div>
+      <label className="contact-consent">
+        <input name="personal-data-consent" type="checkbox" required />
+        <span>Я даю <a href="/personal-data-consent" target="_blank" rel="noreferrer">согласие на обработку персональных данных</a> и ознакомлен с <a href="/privacy" target="_blank" rel="noreferrer">политикой обработки персональных данных</a></span>
+      </label>
       <small>Нажимая кнопку, вы создадите письмо для нашей команды</small>
     </form>
   );
