@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CONSENT_CHANGE_EVENT, ConsentChoice, readConsent, writeConsent } from "@/src/shared/lib/privacy-consent";
 
@@ -25,7 +24,7 @@ export function CookieConsent() {
       <div>
         <strong>Мы используем файлы cookie</strong>
         <p>
-          Они нужны для корректной и безопасной работы сайта. Необязательные cookie используются только с вашего согласия. Подробнее — в <Link href="/privacy">политике обработки персональных данных</Link>
+          Они нужны для корректной и безопасной работы сайта. Необязательные cookie используются только с вашего согласия.
         </p>
       </div>
       <div className="cookie-consent-actions">
