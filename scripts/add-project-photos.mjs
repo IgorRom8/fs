@@ -5,7 +5,8 @@ import postgres from "postgres";
 import sharp from "sharp";
 
 const [projectSlug, ...photoPaths] = process.argv.slice(2);
-const databaseUrl = process.env.DATABASE_URL ?? process.env.DATABASE_URL_NEON;
+// Upload to the same production database that the deployed application prefers.
+const databaseUrl = process.env.DATABASE_URL_NEON ?? process.env.DATABASE_URL;
 
 if (!projectSlug || photoPaths.length === 0) {
   throw new Error(
