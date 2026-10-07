@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AboutSection } from "@/src/widgets/about-section";
 import { ContactSection } from "@/src/widgets/contact-section";
 import { Footer } from "@/src/widgets/footer";
@@ -6,10 +7,11 @@ import { HeroSection } from "@/src/widgets/hero-section";
 import { ProjectsSection } from "@/src/widgets/projects-section";
 import { ServicesSection } from "@/src/widgets/services-section";
 import { StandardsSection } from "@/src/widgets/standards-section";
-import { getPublishedProjects } from "@/src/entities/project/api/projects-repository";
+import { getPublishedProjects } from "@/src/entities/project";
 import { getAccumulatedFacadeVolume } from "@/src/shared/lib/production-volume";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 function getMoscowCalendarDate(now = new Date()) {
   const parts = Object.fromEntries(new Intl.DateTimeFormat("en-CA", {

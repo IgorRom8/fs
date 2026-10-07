@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { asc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { requireAdmin } from "@/src/shared/lib/admin";
+import { requireAdmin } from "@/src/features/admin-auth";
 import { db } from "@/src/shared/lib/db";
 import { media, projectMedia, projectsTable } from "@/src/shared/lib/db/schema";
-import { PhotoUploadForm } from "@/src/shared/ui/photo-upload-form";
-import { SortablePhotoGrid } from "@/src/shared/ui/sortable-photo-grid";
-import { addProjectPhotos, deleteProjectPhoto, reorderProjectPhotos, togglePublished, updateProject } from "../../actions";
+import { PhotoUploadForm, SortablePhotoGrid } from "@/src/features/media-upload";
+import { addProjectPhotos, deleteProjectPhoto, reorderProjectPhotos, updateProject } from "@/src/features/manage-project";
+import { togglePublished } from "@/src/features/manage-publication";
 export const dynamic = "force-dynamic";
 
 export default async function EditProject({ params }: { params: Promise<{ id: string }> }) {

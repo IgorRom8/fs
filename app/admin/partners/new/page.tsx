@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { createPartner } from "../../actions";
-import { requireAdmin } from "@/src/shared/lib/admin";
-import { FileDropzone } from "@/src/shared/ui/file-dropzone";
+import { createPartner } from "@/src/features/manage-partner";
+import { requireAdmin } from "@/src/features/admin-auth";
+import { FileDropzone } from "@/src/features/media-upload";
 
 export default async function NewPartner() {
   await requireAdmin();

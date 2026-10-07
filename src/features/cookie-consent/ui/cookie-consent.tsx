@@ -1,20 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CONSENT_CHANGE_EVENT, ConsentChoice, readConsent, writeConsent } from "@/src/shared/lib/privacy-consent";
+import { CONSENT_CHANGE_EVENT, CONSENT_OPEN_EVENT, ConsentChoice, readConsent, writeConsent, writeMapConsent } from "@/src/shared/lib/privacy-consent";
 
 export function CookieConsent() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const syncVisibility = () => setIsVisible(readConsent() === null);
+    const openSettings = () => setIsVisible(true);
     syncVisibility();
     window.addEventListener(CONSENT_CHANGE_EVENT, syncVisibility);
-    return () => window.removeEventListener(CONSENT_CHANGE_EVENT, syncVisibility);
+    window.addEventListener(CONSENT_OPEN_EVENT, openSettings);
+    return () => {
+      window.removeEventListener(CONSENT_CHANGE_EVENT, syncVisibility);
+      window.removeEventListener(CONSENT_OPEN_EVENT, openSettings);
+    };
   }, []);
 
   function saveChoice(choice: ConsentChoice) {
+    if (choice === "essential") writeMapConsent(false);
     writeConsent(choice);
+    setIsVisible(false);
   }
 
   if (!isVisible) return null;

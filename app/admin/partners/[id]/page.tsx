@@ -2,11 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { togglePublished, updatePartner } from "../../actions";
-import { requireAdmin } from "@/src/shared/lib/admin";
+import { updatePartner } from "@/src/features/manage-partner";
+import { togglePublished } from "@/src/features/manage-publication";
+import { requireAdmin } from "@/src/features/admin-auth";
 import { db } from "@/src/shared/lib/db";
 import { partnersTable } from "@/src/shared/lib/db/schema";
-import { FileDropzone } from "@/src/shared/ui/file-dropzone";
+import { FileDropzone } from "@/src/features/media-upload";
 
 export const dynamic = "force-dynamic";
 

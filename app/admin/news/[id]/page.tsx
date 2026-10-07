@@ -2,11 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { requireAdmin } from "@/src/shared/lib/admin";
+import { requireAdmin } from "@/src/features/admin-auth";
 import { db } from "@/src/shared/lib/db";
 import { newsItems } from "@/src/shared/lib/db/schema";
-import { FileDropzone } from "@/src/shared/ui/file-dropzone";
-import { togglePublished, updateNews } from "../../actions";
+import { FileDropzone } from "@/src/features/media-upload";
+import { updateNews } from "@/src/features/manage-news";
+import { togglePublished } from "@/src/features/manage-publication";
 export const dynamic = "force-dynamic";
 
 export default async function EditNews({ params }: { params: Promise<{ id: string }> }) {

@@ -2,10 +2,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { asc, desc } from "drizzle-orm";
 import { signOut } from "@/auth";
-import { requireAdmin } from "@/src/shared/lib/admin";
+import { requireAdmin } from "@/src/features/admin-auth";
 import { db } from "@/src/shared/lib/db";
 import { galleryAlbums, newsItems, partnersTable, projectsTable } from "@/src/shared/lib/db/schema";
-import { deleteEntry, togglePublished } from "./actions";
+import { deleteEntry, togglePublished } from "@/src/features/manage-publication";
 export const dynamic = "force-dynamic";
 export default async function AdminPage() { const user = await requireAdmin(); const [news, projects, gallery, partners] = await Promise.all([db().select({id:newsItems.id,title:newsItems.title,published:newsItems.published}).from(newsItems).orderBy(desc(newsItems.createdAt)), db().select({id:projectsTable.id,title:projectsTable.title,published:projectsTable.published}).from(projectsTable).orderBy(desc(projectsTable.createdAt)), db().select({id:galleryAlbums.id,title:galleryAlbums.title,published:galleryAlbums.published}).from(galleryAlbums).orderBy(desc(galleryAlbums.year)), db().select({id:partnersTable.id,title:partnersTable.title,published:partnersTable.published,position:partnersTable.position,logoId:partnersTable.logoId,logoPath:partnersTable.logoPath}).from(partnersTable).orderBy(asc(partnersTable.position))]); return <main className="admin-shell"><header><div><span>FS / ADMIN</span><strong>{user.name}</strong></div><form action={async()=>{"use server";await signOut({redirectTo:"/"})}}><button className="admin-ghost">Выйти</button></form></header><section className="admin-heading"><div><p>Управление контентом</p><h1>Публикации</h1></div></section><AdminList title="Новости" type="news" items={news}/><AdminList title="Объекты" type="project" items={projects}/><AdminList title="Галерея" type="gallery" items={gallery}/><AdminList title="Партнёры" type="partner" items={partners}/></main>; }
 type AdminItem = { id:string; title:string; published:boolean; position?:number; logoId?:string|null; logoPath?:string|null };

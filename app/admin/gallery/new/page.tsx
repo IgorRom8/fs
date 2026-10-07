@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { createGalleryAlbum } from "../../actions";
-import { requireAdmin } from "@/src/shared/lib/admin";
-import { FileDropzone } from "@/src/shared/ui/file-dropzone";
+import { createGalleryAlbum } from "@/src/features/manage-gallery";
+import { requireAdmin } from "@/src/features/admin-auth";
+import { FileDropzone } from "@/src/features/media-upload";
 
 export default async function NewGalleryAlbum() {
   await requireAdmin();

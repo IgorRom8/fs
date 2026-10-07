@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
-import { addGalleryPhotos, removeGalleryPhoto, reorderGalleryPhotos, togglePublished, updateGalleryAlbum } from "../../actions";
-import { requireAdmin } from "@/src/shared/lib/admin";
+import { addGalleryPhotos, removeGalleryPhoto, reorderGalleryPhotos, updateGalleryAlbum } from "@/src/features/manage-gallery";
+import { togglePublished } from "@/src/features/manage-publication";
+import { requireAdmin } from "@/src/features/admin-auth";
 import { db } from "@/src/shared/lib/db";
 import { galleryAlbums, galleryMedia, media } from "@/src/shared/lib/db/schema";
-import { PhotoUploadForm } from "@/src/shared/ui/photo-upload-form";
-import { SortablePhotoGrid } from "@/src/shared/ui/sortable-photo-grid";
+import { PhotoUploadForm, SortablePhotoGrid } from "@/src/features/media-upload";
 
 export default async function EditGalleryAlbum({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin(); const { id } = await params;

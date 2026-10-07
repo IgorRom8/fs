@@ -1,6 +1,6 @@
 import { Brand } from "@/src/shared/ui/brand";
 import { Arrow } from "@/src/shared/ui/arrow";
-import { CookieSettingsButton } from "@/src/shared/ui/cookie-settings-button";
+import { CookieSettingsButton } from "@/src/features/cookie-consent";
 
 export function Footer() {
   return (
