@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { removeSentencePeriods } from "@/src/shared/lib/text/remove-sentence-periods";
 import styles from "./partner-grid.module.css";
 
 type Partner = { id: string; title: string; description: string; logo: string };
@@ -32,7 +31,7 @@ export function PartnerGrid({ partners }: { partners: Partner[] }) {
         <span className={styles.back}>
           <span className={styles.number}>{String(index + 1).padStart(2, "0")}</span>
           <strong>{partner.title}</strong>
-          <span className={styles.description}>{removeSentencePeriods(partner.description)}</span>
+          <span className={styles.description}>{partner.description}</span>
         </span>
       </span>
     </button>)}
