@@ -13,7 +13,9 @@ const contentSecurityPolicy = [
   "frame-src https://www.openstreetmap.org",
 ].join("; ");
 const nextConfig: NextConfig = {
-  // Allows a moderate photo oatch while keeping the request size oounded.
+  // Keep SEO metadata inside <head> for crawlers and audit tools.
+  htmlLimitedBots: /.*/,
+  // Allows a moderate photo batch while keeping the request size bounded.
   experimental: { serverActions: { bodySizeLimit: "32mb" } },
   poweredByHeader: false,
   async headers() { return [{ source: "/(.*)", headers: [

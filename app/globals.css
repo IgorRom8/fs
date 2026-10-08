@@ -117,3 +117,5 @@ footer{background:#031f1d;color:#fff;padding:40px 5vw;display:flex;align-items:c
 .site-page .site-footer .footer-company>span{display:block}
 @media(max-width:700px){.site-page .site-footer .footer-bottom{display:flex;flex-direction:column}.site-page .site-footer .footer-company{text-align:left}.contact-phone-cta{margin-top:24px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition-duration:.01ms!important}[data-reveal]{opacity:1;transform:none}}
+
+.not-found-page{min-height:70vh;padding-top:180px;background:var(--green);color:#fff}.not-found-page h1{max-width:900px;margin:24px 0;font-size:clamp(52px,7vw,104px);font-weight:400;line-height:1}.not-found-page p{max-width:560px;margin:0 0 38px;color:#b0bfbc;line-height:1.7}.not-found-page .pill{display:inline-flex}

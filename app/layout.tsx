@@ -19,6 +19,10 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   applicationName: siteName,
+  icons: {
+    icon: [{ url: "/icon.png", type: "image/png" }],
+    apple: [{ url: "/icon.png", type: "image/png" }],
+  },
   openGraph: {
     type: "website",
     locale: "ru_RU",
@@ -43,7 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     "@type": "Organization",
     name: siteName,
     url: absoluteUrl("/"),
-    logo: absoluteUrl("/favicon.ico"),
+    logo: absoluteUrl("/icon.png"),
     telephone: "+7 499 957-80-30",
     address: {
       "@type": "PostalAddress",

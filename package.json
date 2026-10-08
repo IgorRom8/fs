@@ -6,10 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "deploy:build": "npm run db:migrate && npm run build",
+    "deploy:check": "node scripts/validate-production-env.mjs",
     "start": "next start",
     "admin:hash": "node scripts/hash-admin-password.mjs",
     "admin:import": "node --env-file=.env.local scripts/import-existing-content.mjs",
-    "db:migrate": "node scripts/migrate-database.mjs"
+    "db:migrate": "node scripts/migrate-database.mjs",
+    "db:backup": "node scripts/backup-database.mjs"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.2",
