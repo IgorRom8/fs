@@ -18,7 +18,7 @@ export async function getPublishedPartners() {
   if (!hasDatabase()) return initialPartners;
   try {
     const rows = await db().select().from(partnersTable).where(eq(partnersTable.published, true)).orderBy(asc(partnersTable.position), asc(partnersTable.createdAt));
-    const partners = rows.map((partner) => ({ ...partner, logo: partner.logoId ? `/api/media/${partner.logoId}` : partner.logoPath ?? "/partners/versal.png" }));
+    const partners = rows.map((partner) => ({ ...partner, logo: partner.logoId ? `/api/media/${encodeURIComponent(partner.logoId)}` : partner.logoPath ?? "/partners/versal.png" }));
     const missingInitialPartners = initialPartners.filter((initial) =>
       !partners.some((partner) => partner.slug === initial.slug),
     );

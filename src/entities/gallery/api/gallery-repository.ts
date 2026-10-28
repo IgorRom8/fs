@@ -8,6 +8,6 @@ export async function getPublishedGalleryAlbums() {
   const albums = await db().select().from(galleryAlbums).where(eq(galleryAlbums.published, true)).orderBy(desc(galleryAlbums.year), desc(galleryAlbums.createdAt));
   return Promise.all(albums.map(async album => {
     const images = await db().select({ id: media.id, alt: media.alt }).from(galleryMedia).innerJoin(media, eq(galleryMedia.mediaId, media.id)).where(eq(galleryMedia.albumId, album.id)).orderBy(asc(galleryMedia.position));
-    return { ...album, images: images.map(image => ({ src: `/api/media/${image.id}`, alt: image.alt })) };
+    return { ...album, images: images.map(image => ({ src: `/api/media/${encodeURIComponent(image.id)}`, alt: image.alt })) };
   }));
 }
