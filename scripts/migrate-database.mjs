@@ -5,12 +5,12 @@ import { loadEnvFile } from "node:process";
 import postgres from "postgres";
 
 const localEnvironment = resolve(".env.local");
-if (!process.env.DATABASE_URL && !process.env.DATABASE_URL_NEON && existsSync(localEnvironment)) {
+if (!process.env.DATABASE_URL && existsSync(localEnvironment)) {
   loadEnvFile(localEnvironment);
 }
 
-const databaseUrl = process.env.DATABASE_URL ?? process.env.DATABASE_URL_NEON;
-if (!databaseUrl) throw new Error("DATABASE_URL или DATABASE_URL_NEON не настроен");
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) throw new Error("DATABASE_URL не настроен");
 
 const directory = resolve("drizzle");
 const migrations = (await readdir(directory)).filter((file) => file.endsWith(".sql")).sort();

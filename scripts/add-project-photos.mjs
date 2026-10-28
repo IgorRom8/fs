@@ -5,8 +5,8 @@ import postgres from "postgres";
 import sharp from "sharp";
 
 const [projectSlug, ...photoPaths] = process.argv.slice(2);
-// Upload to the same production database that the deployed application prefers.
-const databaseUrl = process.env.DATABASE_URL_NEON ?? process.env.DATABASE_URL;
+// Upload to the same production database used by the deployed application.
+const databaseUrl = process.env.DATABASE_URL;
 
 if (!projectSlug || photoPaths.length === 0) {
   throw new Error(
@@ -15,7 +15,7 @@ if (!projectSlug || photoPaths.length === 0) {
 }
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL or DATABASE_URL_NEON is required");
+  throw new Error("DATABASE_URL is required");
 }
 
 function normalizeFilename(filePath) {
