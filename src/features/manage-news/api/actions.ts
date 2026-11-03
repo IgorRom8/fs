@@ -17,11 +17,11 @@ const newsSchema = z.object({
   content: requiredText,
 });
 
-const publicationDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Укажите дату публикации");
+const publicationDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Укажите дату публикации");
 
 export async function createNews(form: FormData) {
   const user = await requireAdmin();
-  const parsed = newsSchema.extend({ published: z.boolean(), publicationDate }).parse({
+  const parsed = newsSchema.extend({ published: z.boolean(), publicationDate: publicationDateSchema }).parse({
     slug: String(form.get("slug") ?? ""), title: form.get("title"), excerpt: form.get("excerpt"),
     content: form.get("content"), published: form.get("published") === "on",
     publicationDate: String(form.get("publicationDate") ?? new Date().toISOString().slice(0, 10)),
@@ -38,7 +38,7 @@ export async function updateNews(form: FormData) {
   const user = await requireAdmin();
   const id = z.string().uuid().parse(form.get("id"));
   const parsed = newsSchema.parse({ slug: String(form.get("slug") ?? ""), title: form.get("title"), excerpt: form.get("excerpt"), content: form.get("content") });
-  const date = publicationDate.parse(String(form.get("publicationDate") ?? ""));
+  const date = publicationDateSchema.parse(String(form.get("publicationDate") ?? ""));
   const [current] = await db().select({ coverId: newsItems.coverId }).from(newsItems).where(eq(newsItems.id, id)).limit(1);
   if (!current) throw new Error("Новость не найдена");
   const file = form.get("cover");
