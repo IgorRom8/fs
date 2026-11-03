@@ -21,7 +21,7 @@ const publicationDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Укажите 
 
 export async function createNews(form: FormData) {
   const user = await requireAdmin();
-  const parsed = newsSchema.extend({ published: z.boolean() }).parse({
+  const parsed = newsSchema.extend({ published: z.boolean(), publicationDate }).parse({
     slug: String(form.get("slug") ?? ""), title: form.get("title"), excerpt: form.get("excerpt"),
     content: form.get("content"), published: form.get("published") === "on",
     publicationDate: String(form.get("publicationDate") ?? new Date().toISOString().slice(0, 10)),
